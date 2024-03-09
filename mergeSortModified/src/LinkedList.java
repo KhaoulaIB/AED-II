@@ -45,8 +45,6 @@ public class LinkedList <E extends Comparable<E>> {
         return p1;
     }
 
-
-
     public void mergeSort(){
         this.first = mergeSort(first);
 
@@ -73,20 +71,7 @@ public class LinkedList <E extends Comparable<E>> {
             return merge(left, right); // Combina las sublistas ordenadas
 
     }
-  /* public static void mergeSort(int[] arr, int l, int r){
-        if(l<r){
-            Node mid  = middle
-            mergeSort(arr, l, m);
-            mergeSort(arr, m+1, r);
-            merge(arr, l, m ,r );
-        }
 
-
-    }*/
-    /**
-     *
-     * ordena la lista
-     */
 
     /**
      *Fusiona les subllistes
