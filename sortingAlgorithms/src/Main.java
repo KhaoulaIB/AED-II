@@ -257,34 +257,28 @@ public class Main {
         swap (arr, n/2, n-1);
     }
 //----------------------------------------------------------------------------
-    public static void selectionSort(int [] array){
+   public static void selectionSort(int[] arr) {
 
-        //dividir array en subconjunto ordenados
-
-        //para guardar los subconjuntos
-        int n = array.length;
-
-        //selecioonar el pivot
-        int pivot = array[n-1];
-        int split =0;
-        for (int i = 0; i<n; i++){
-            if (pivot>array[i]){
-                //swap
-                int tmp = array[i];
-                pivot=array[split];
-                array[split]=tmp;
-
-                split++;
-
+        int n = arr.length;
+        int index = -1;
+        int tmp;
+        for (int i = 0; i < n; i++) {
+            int minim = Integer.MAX_VALUE; //Para que entra la primera vez
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < minim) {
+                    minim = arr[j];
+                    index = j;
+                }
 
             }
+            //swap
+            tmp = arr[index];
+            arr[index] = arr[i];
+            arr[i] = tmp;
+            printArray(arr);
+
 
         }
-
-
-
-
-
     }
 
     
