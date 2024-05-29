@@ -9,17 +9,18 @@ public class BinaryTree<E extends Comparable<E>>  {
     /**
      * Representación interna de un nodo en el árbol binario.
      */
-    private class NodeArbre {
+    private class Node {
 
 
         E element;
 
-        NodeArbre left;
-
-        NodeArbre right;
+        Node left;
 
 
-        public NodeArbre(E element) {
+        Node right;
+
+
+        public Node(E element) {
             this.element = element;
             left = null;
             right = null;
@@ -34,19 +35,19 @@ public class BinaryTree<E extends Comparable<E>>  {
             this.element = element;
         }
 
-        public NodeArbre getLeft() {
+        public Node getLeft() {
             return left;
         }
 
-        public void setLeft(NodeArbre left) {
+        public void setLeft(Node left) {
             this.left = left;
         }
 
-        public NodeArbre getRight() {
+        public Node getRight() {
             return right;
         }
 
-        public void setRight(NodeArbre right) {
+        public void setRight(Node right) {
             this.right = right;
         }
     }
@@ -54,7 +55,7 @@ public class BinaryTree<E extends Comparable<E>>  {
     /**
      * Raíz del árbol binario.
      */
-    NodeArbre root;
+    Node root;
 
     /**
      * Constructor de un arbol binario vacío.
@@ -87,25 +88,11 @@ public class BinaryTree<E extends Comparable<E>>  {
         }
     }
 
-    /**
-     * Método auxiliar recursivo para la inserción de un elemento nuevo en el
-     * árbol. Para decidir dónde realizar la inserción, comienza desde la raíz.
-     * Si el elemento es menor, examina el subárbol izquierdo; si es mayor,
-     * explora el subárbol derecho. Este proceso se repite de manera recursiva
-     * hasta llegar a la hoja correspondiente para realizar la inserción. Orden
-     * de complejidad: O(log2(n)), ya que para cada llamada que se hace, se va
-     * dividiendo el árbol por la mitad para que queden la mitad de las ramas
-     * que hay en el árbol (suponiendo que el árbol es completo o lleno).
-     *
-     * @param element Elemento que se va a insertar.
-     * @param current Nodo actual en el cual se considera la inserción.
-     * @return El nodo actual después de realizar la inserción recursiva.
-     */
-    private NodeArbre insertRecursive(E element, NodeArbre current) {
+
+    private Node insertRecursive(E element, Node current) {
         if (current == null) {
-            return new NodeArbre(element);
+            return new Node(element);
         }
-        //Miramos si inserimos en la parte derecha o izquierda.
         if (element.compareTo(current.element) < 0) {
             current.left = insertRecursive(element, current.left);
         } else {
@@ -115,14 +102,13 @@ public class BinaryTree<E extends Comparable<E>>  {
     }
 
 
-    //insert iterative:
     void insertIterative(E e){
-        NodeArbre node = new NodeArbre(e);
+        Node node = new Node(e);
         if (root == null) {//es la raíz
             root = node;
         }
         //buscanos donde insertarlo
-        NodeArbre aux = root;
+        Node aux = root;
 
         while (aux != null) {
             if (e.compareTo(aux.element) < 0) {//avanzar en el subarbol izquierdo
@@ -142,40 +128,58 @@ public class BinaryTree<E extends Comparable<E>>  {
             }
         }
     }
-    /**
-     * Comprueba si un elemento está presente en el árbol. Llama al método
-     * containsRecursive para introducirle el parámetro NodeArbre. El orden de
-     * complejidad es O(log2(n)), porque llama al método recursivo
-     * containsRecursive que es O(log2(n)) como se explica en el método.
-     *
-     * @param e elemento que comprobamos si existe en el árbol.
-     * @return Verdadero en caso de que "e" existe en el árbol. Falso en caso
-     * contrario.
-     */
+
+    public void remove(E element){
+        if (contains(element)){
+            root = removeRecusrvie(root, element);
+        }
+    }
+    private Node removeRecusrvie(Node node, E element){
+        if (node==null){
+            return null;
+        }
+        int cmp = element.compareTo(node.element);
+        if (cmp<0){
+            node.left=removeRecusrvie(node.left,element);
+        }else if (cmp>0){
+            node.right=removeRecusrvie(node.right, element);
+        }else{
+            //I found you, you poor node, get ready to be deleted!
+            //case 0: ZERO CHILD
+            if (node.right==null && node.left==null){
+                return null;
+            }
+            //Case 1: ONE CHILD, CAN BE LEFT OR RIGHT
+            if (node.right==null){
+                return node.left;
+            }else if (node.left==null){
+                return node.right;
+            }else{
+                //It has twd children, we'll have to do more stuff
+
+                //In this case we can either search the minimum node in the left-subtree, or the maximum
+                //in the right-subtree
+
+                Node tmp = findMin(root.right);
+               root.element=tmp.element;
+               node.right=removeRecusrvie(node.right,tmp.element);
+
+            }
+
+
+        }
+        return node;
+    }
+    private Node findMin(Node node) {
+        while (node.left != null) node = node.left;
+        return node;
+    }
     public boolean contains(E e) {
         return containsRecursive(e, root);
     }
 
-    /**
-     * Verifica de manera recursiva si el árbol binario contiene el elemento
-     * dado a partir del nodo actual. Si el nodo actual es nulo, el elemento no
-     * está presente en este subárbol y devuelve false. En caso contrario
-     * compara el elemento con el elemento del nodo actual. Si son iguales, el
-     * elemento se encuentra en este nodo y devuelve verdadero. Si el elemento
-     * es menor, la búsqueda continúa en el subárbol izquierdo. Si el elemento
-     * es mayor, la búsqueda continúa en el subárbol derecho. Se repite el
-     * proceso recursivamente hasta procesar todo el árbol. Orden de
-     * complejidad: O(log2(n)) en promedio, donde "n" es el número de nodos en
-     * el árbol, ya que se va mirando si el elemento está presente en el lado
-     * derecho o izquierdo y se va reduciendo por la mitad el tamaño del árbol
-     * en cada llamada que se realiza.
-     *
-     * @param element Elemento que se está buscando en el árbol.
-     * @param current Nodo actual en el que se está realizando la búsqueda.
-     * @return Verdadero si el elemento está presente en el árbol, falso en caso
-     * contrario.
-     */
-    private boolean containsRecursive(E element, NodeArbre current) {
+
+    private boolean containsRecursive(E element, Node current) {
         if (current == null) {
             return false;
         }
@@ -193,7 +197,7 @@ public class BinaryTree<E extends Comparable<E>>  {
 
     public boolean containsIterative (E e){
 
-        NodeArbre current = root;
+        Node current = root;
         while (current!=null){
             if (current.element.compareTo(e)>0){
                 current = current.right;
@@ -216,14 +220,14 @@ public class BinaryTree<E extends Comparable<E>>  {
 
         int maxLength = 0;
 
-        Stack<NodeArbre> stack = new Stack<>();
+        Stack<Node> stack = new Stack<>();
         Stack<Integer> depths = new Stack<>();
 
         stack.push(root);
         depths.push(0);
 
         while (!stack.isEmpty()) {
-            NodeArbre current = stack.pop();
+            Node current = stack.pop();
             int currentDepth = depths.pop();
 
             if (current.left == null && current.right == null) {
@@ -258,25 +262,8 @@ public class BinaryTree<E extends Comparable<E>>  {
 
     }
 
-    /**
-     * Obtiene la madre (nodo padre) del elemento dado de manera recursiva a
-     * partir del nodo actual. Si el nodo actual es nulo, el elemento no tiene
-     * madre en este subárbol y devuelve null. Comprueba si el hijo izquierdo o
-     * derecho del nodo actual contiene el elemento buscado. Si es así, devuelve
-     * el elemento del nodo actual como la madre. Si no, continúa la búsqueda de
-     * manera recursiva en los subárboles izquierdo y derecho. El orden de
-     * complejidad es O(log2(n)), donde "n" representa el número de nodos en el
-     * árbol, ya que se va partiendo en parte derecha o izquierda en cada
-     * llamada recursiva que se realiza haciendo más pequeño el tamaño.
-     *
-     * @param element Elemento del cual se busca la madre.
-     * @param current Nodo actual en el que se está realizando la búsqueda de la
-     * madre.
-     * @return El elemento de la madre del nodo que contiene el elemento dado.
-     * Devuelve nulo si el elemento no tiene madre o no está presente.
-     *
-     */
-    private E getMotherRecursive(E element, NodeArbre current) {
+
+    private E getMotherRecursive(E element, Node current) {
         if (current == null) {
             return null;
         }
@@ -293,8 +280,8 @@ public class BinaryTree<E extends Comparable<E>>  {
     }
 
     public E getMotherIterative(E e) {
-        NodeArbre current = root;
-        NodeArbre parent = null;
+        Node current = root;
+        Node parent = null;
 
         while (current != null) {
             int comparisionResult = e.compareTo(current.element);
@@ -315,37 +302,12 @@ public class BinaryTree<E extends Comparable<E>>  {
     }
 
 
-
-
-
-
-
-
-    /**
-     * Calcula la longitud de la rama más larga en el árbol binario. El orden de
-     * complejidad es O(n), porque el orden de complejidad del método recursivo
-     * al que llama es O(n).
-     *
-     * @return La longitud de la rama más larga a partir del nodo actual.
-     */
     public int longestBranch() {
         return recursiveLongestBranch(root);
     }
 
-    /**
-     * Calcula de manera recursiva la longitud de la rama más larga a partir del
-     * nodo raíz. Si el nodo actual es nulo, la longitud de la rama es 0. En
-     * caso contrario calcula de manera recursiva la longitud de las ramas
-     * izquierda y derecha. Devuelve la longitud máxima entre cada una de las
-     * hojas, más 1 para contar el nodo actual. El orden de complejidad es O(n),
-     * ya que ha de visitar todos los nodos del árbol para determinar cual es la
-     * rama más larga.
-     *
-     * @param current Nodo actual en el que se está calculando la longitud de la
-     * rama.
-     * @return La longitud de la rama más larga a partir del nodo actual.
-     */
-    private int recursiveLongestBranch(NodeArbre current) {
+
+    private int recursiveLongestBranch(Node current) {
         if (current == null || (current.left == null && current.right == null)) {
             return 0;
         }
@@ -368,7 +330,7 @@ public class BinaryTree<E extends Comparable<E>>  {
     }
 
 
-    void printPreorder(NodeArbre node){
+    void printPreorder(Node node){
         if (node == null)
             return;
         // First print data of node
@@ -379,7 +341,7 @@ public class BinaryTree<E extends Comparable<E>>  {
         printPreorder(node.right);
     }
 
-    void printPostorder(NodeArbre node)
+    void printPostorder(Node node)
     {
         if (node == null)
             return;
@@ -391,7 +353,7 @@ public class BinaryTree<E extends Comparable<E>>  {
         System.out.print(node.element + ",");
     }
 
-    void printInorder(NodeArbre node)
+    void printInorder(Node node)
     {
         if (node == null)
             return;
