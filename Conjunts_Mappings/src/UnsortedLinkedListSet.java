@@ -58,12 +58,12 @@ public class UnsortedLinkedListSet <E> {
 
     public boolean add(E elem){
 
-        boolean trobat = contains(elem);
-        if (!trobat){
+        boolean exists = contains(elem);
+        if (!exists){
             Node n = new Node(elem,first);
             first=n;
         }
-        return !trobat;
+        return !exists;
 
     }
 
