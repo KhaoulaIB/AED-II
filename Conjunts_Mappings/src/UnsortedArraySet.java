@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 public class UnsortedArraySet<E> {
 
 
@@ -42,15 +44,12 @@ public class UnsortedArraySet<E> {
      */
         public boolean add(E elem){
             if (n<array.length && !contains(elem)){
-                array[n]=elem;
-                n++;
+                array[n++]=elem;
                 return true;
             }else{
                 return false;
 
             }
-
-
         }
 
     /**
@@ -60,23 +59,45 @@ public class UnsortedArraySet<E> {
      * O(n)
      */
         public boolean remove (E elem){
-            int i =0;
-            boolean trobat = false;
-            while (!trobat && i<n){
-                trobat = elem.equals(array[i]);
-                i++;
+            for (int i = 0; i < n; i++) {
+                if (array[i].equals(elem)) {
+                    array[i] = array[n - 1];
+                    n--;
+
+                    return true;
+                }
             }
-            if (trobat){
-                //switch with the last element
-                array[i-1]=array[n-1];
-                n--;
-            }
-            return trobat;
-    }
+
+            return false;
+        }
 
 
     public boolean isEmpty(){
             return n==0;
+    }
+
+    public IteratorUnsortedArraySet iterator() {
+        return new IteratorUnsortedArraySet();
+    }
+
+    private class IteratorUnsortedArraySet implements Iterator<E> {
+
+        private int iterator;
+
+        private IteratorUnsortedArraySet() {
+            iterator = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator < n;
+        }
+
+        @Override
+        public E next() {
+            return array[iterator++];
+
+        }
     }
 
 }
