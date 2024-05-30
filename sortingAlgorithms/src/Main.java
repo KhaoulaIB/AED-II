@@ -256,6 +256,42 @@ public class Main {
         //situzar el pivot al final de arr
         swap (arr, n/2, n-1);
     }
+//millora del quicksort si l'array ja casi es troba ordenat
+    private static int partition(int[] arr, int low, int high) {
+    // Utilitzar la Mediana de Tres per seleccionar el pivot
+    int mid = low + (high - low) / 2;
+    int pivot = medianOfThree(arr, low, mid, high);
+    
+    // Col·locar el pivot a la posició final per reutilitzar el codi existent
+    swap(arr, pivot, high);
+    pivot = arr[high];
+    
+    int split = low;
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
+            swap(arr, split, j);
+            split++;
+        }
+    }
+    swap(arr, split, high);
+    return split;
+}
+
+private static int medianOfThree(int[] arr, int low, int mid, int high) {
+    if ((arr[low] - arr[mid]) * (arr[high] - arr[low]) >= 0) {
+        return low;
+    } else if ((arr[mid] - arr[low]) * (arr[high] - arr[mid]) >= 0) {
+        return mid;
+    } else {
+        return high;
+    }
+}
+
+private static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
 //----------------------------------------------------------------------------
    public static void selectionSort(int[] arr) {
 
