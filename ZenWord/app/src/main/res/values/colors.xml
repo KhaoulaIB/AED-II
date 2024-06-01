@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name ="blue1">#327BA8</color>
+<!--    <color name="gray">#7d858a</color>-->
+    <color name= "Olive_Green">#a4b342</color>
+<!--    <color name="Lblue">#9BB0C1</color>-->
+    <color name="L2blue">#51829B</color>
+    <color name="peach">#F6995C</color>
+    <color name="Dark_Teal">#344955</color>
+    <color name="Midnight_blue">#1B1A55</color>
+    <color name="Dark_maroon">#503C3C</color>
+    <color name="Dark_bluish_green">#1B4242</color>
+    <color name="Dark_purple">#451952</color>
+
+    <array name="colors_array">
+        <item>@color/blue1</item>
+        <item>@color/Dark_bluish_green</item>
+        <item>@color/Olive_Green</item>
+        <item>@color/peach</item>
+        <item>@color/Dark_Teal</item>
+        <item>@color/Midnight_blue</item>
+        <item>@color/Dark_maroon</item>
+        <item>@color/Dark_purple</item>
+        <!-- Agrega más colores según sea necesario -->
+    </array>
+</resources>
+
